@@ -1,6 +1,7 @@
 package com.lucasmoraist.wallet_core.infrastructure.database.persistence;
 
 import com.lucasmoraist.wallet_core.application.gateway.WalletPersistence;
+import com.lucasmoraist.wallet_core.domain.enums.PaymentType;
 import com.lucasmoraist.wallet_core.domain.model.User;
 import com.lucasmoraist.wallet_core.domain.model.Wallet;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.UserEntity;
@@ -44,9 +45,15 @@ public class WalletPersistenceImpl implements WalletPersistence {
     }
 
     @Override
-    public Wallet updateAmount(UUID walletId, BigDecimal amount) {
+    public Wallet updateAmount(UUID walletId, BigDecimal amount, PaymentType paymentType) {
         WalletEntity walletEntity = findEntityById(walletId);
-        walletEntity.setBalance(walletEntity.getBalance().add(amount));
+
+        switch (paymentType) {
+            case DEPOSIT -> walletEntity.setBalance(walletEntity.getBalance().add(amount));
+            case WITHDRAWAL, DEBIT, CREDIT -> walletEntity.setBalance(walletEntity.getBalance().subtract(amount));
+            default -> throw new IllegalArgumentException("Unsupported payment type: " + paymentType);
+        }
+
         return WalletMapper.toDomain(walletEntity);
     }
 
