@@ -12,14 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_wallet_transactions")
@@ -36,6 +39,8 @@ public class WalletTransactionEntity {
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     private PaymentType type;
+
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
 }
