@@ -3,3 +3,43 @@ spring:
     active: ${PROFILE_ACTIVE:default}
   application:
     name: wallet-core
+  cloud:
+    config:
+      fail-fast: true
+    stream:
+      bindings:
+        fromProcessTransfer-in-0:
+          destination: payflow-exchange
+          group: wallet.processing
+          content-type: application/json
+          consumer:
+            concurrency: 5
+            max-attempts: 3
+            back-off-initial-interval: 1000
+            back-off-multiplier: 2.0
+        toProcessTransfer-out-0:
+          destination: payflow-exchange
+          content-type: application/json
+        toSendNotification-out-0:
+          destination: payflow-exchange
+          content-type: application/json
+      rabbit:
+        bindings:
+          fromProcessTransfer-in-0:
+            consumer:
+              binding-routing-key: transfer.created
+              auto-bind-dlq: false
+              republish-to-dlq: false
+              transactional: true
+          toProcessTransfer-out-0:
+            producer:
+              transactional: true
+              routing-key-expression: headers.transferRoutingKey
+          toSendNotification-out-0:
+            producer:
+              transactional: true
+              routing-key-expression: headers.notificationRoutingKey
+
+logging:
+  level:
+    com.lucasmoraist: ${LOG_LEVEL:DEBUG}
