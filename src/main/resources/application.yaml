@@ -1,3 +1,5 @@
 spring:
+  profiles:
+    active: ${PROFILE_ACTIVE:default}
   application:
     name: wallet-core
