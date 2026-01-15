@@ -23,12 +23,12 @@ public class TransactionalPersistenceImpl implements TransactionalPersistence {
     private final WalletTransactionalRepository walletTransactionalRepository;
 
     @Override
-    public WalletTransaction saveTransaction(Wallet wallet, BigDecimal amount) {
+    public WalletTransaction saveTransaction(Wallet wallet, BigDecimal amount, PaymentType paymentType) {
         WalletEntity walletEntity = WalletMapper.toEntity(wallet);
         WalletTransactionEntity transactionEntity = WalletTransactionEntity.builder()
                 .wallet(walletEntity)
                 .amount(amount)
-                .type(PaymentType.DEPOSIT)
+                .type(paymentType)
                 .build();
         WalletTransactionEntity transactionSaved = this.walletTransactionalRepository.save(transactionEntity);
         return WalletTransactionMapper.toDomain(transactionSaved);
