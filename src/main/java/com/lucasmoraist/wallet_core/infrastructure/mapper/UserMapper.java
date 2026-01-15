@@ -16,10 +16,10 @@ public final class UserMapper {
                 entity.getEmail(),
                 entity.getPassword(),
                 entity.getRole(),
-                entity.getWallets()
+                entity.getWallets() != null ? entity.getWallets()
                         .stream()
                         .map(WalletMapper::toDomain)
-                        .toList(),
+                        .toList() : null,
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
