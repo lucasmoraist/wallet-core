@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: wallet_db
     volumes:
       - db:/var/lib/postgresql/data
+    networks:
+      - backend
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -22,9 +24,32 @@ services:
       PGADMIN_DEFAULT_PASSWORD: password
     volumes:
       - pgadmin:/var/lib/pgadmin
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - backend
 
 volumes:
+  rabbitmq-data:
+    driver: local
   db:
     driver: local
   pgadmin:
     driver: local
+
+networks:
+  backend:
+    driver: bridge
