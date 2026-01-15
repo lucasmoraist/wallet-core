@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface WalletDocumentationRoutes {
 
+    ResponseEntity<Void> addWallet(UUID userId);
     ResponseEntity<BalanceDTO> consultBalance(UUID walletId);
 
 }
