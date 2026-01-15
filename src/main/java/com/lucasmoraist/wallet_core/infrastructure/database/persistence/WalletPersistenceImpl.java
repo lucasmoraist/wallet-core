@@ -45,6 +45,7 @@ public class WalletPersistenceImpl implements WalletPersistence {
     }
 
     @Override
+    @Transactional
     public Wallet updateAmount(UUID walletId, BigDecimal amount, PaymentType paymentType) {
         WalletEntity walletEntity = findEntityById(walletId);
 

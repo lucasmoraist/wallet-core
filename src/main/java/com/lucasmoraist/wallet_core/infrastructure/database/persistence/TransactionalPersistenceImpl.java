@@ -12,6 +12,7 @@ import com.lucasmoraist.wallet_core.infrastructure.mapper.WalletTransactionMappe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -23,6 +24,7 @@ public class TransactionalPersistenceImpl implements TransactionalPersistence {
     private final WalletTransactionalRepository walletTransactionalRepository;
 
     @Override
+    @Transactional
     public WalletTransaction saveTransaction(Wallet wallet, BigDecimal amount, PaymentType paymentType) {
         WalletEntity walletEntity = WalletMapper.toEntity(wallet);
         WalletTransactionEntity transactionEntity = WalletTransactionEntity.builder()
