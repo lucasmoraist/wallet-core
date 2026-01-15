@@ -9,19 +9,19 @@ import com.lucasmoraist.wallet_core.domain.model.WalletTransaction;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class DepositAmountCase {
+public class DebitAmountCase {
 
     private final WalletPersistence walletPersistence;
     private final TransactionalPersistence transactionalPersistence;
 
-    public DepositAmountCase(WalletPersistence walletPersistence, TransactionalPersistence transactionalPersistence) {
+    public DebitAmountCase(WalletPersistence walletPersistence, TransactionalPersistence transactionalPersistence) {
         this.walletPersistence = walletPersistence;
         this.transactionalPersistence = transactionalPersistence;
     }
 
     public WalletTransaction execute(UUID walletId, BigDecimal amount) {
-        Wallet wallet = walletPersistence.updateAmount(walletId, amount, PaymentType.DEPOSIT);
-        return transactionalPersistence.saveTransaction(wallet, amount, PaymentType.DEPOSIT);
+        Wallet wallet = walletPersistence.updateAmount(walletId, amount, PaymentType.DEBIT);
+        return transactionalPersistence.saveTransaction(wallet, amount, PaymentType.DEBIT);
     }
 
 }
