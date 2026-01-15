@@ -1,0 +1,19 @@
+{
+  "transferId": "a847fd5e-052e-42bb-82cb-842b09af6233",
+  "payer": {
+    "payerId": "8d53eab3-854f-4691-a3bf-90b7c6e7bd29",
+    "name": "John Doe",
+    "email": "johndoe@example.com"
+  },
+  "payee": {
+    "payeeId": "692770fb-8550-427c-a035-7ad89aa460c5",
+    "name": "Kleber Sanches",
+    "email": "klebersanches@example.com"
+  },
+  "amount": 100.00,
+  "status": "PENDING",
+  "createdAt": "2026-01-15T15:50:53.094509700",
+  "payflow": {
+    "traceId": "a847fd5e-052e-42bb-82cb-842b09af6233"
+  }
+}
