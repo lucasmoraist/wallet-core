@@ -2,6 +2,7 @@ package com.lucasmoraist.wallet_core.infrastructure.database.entity;
 
 import com.lucasmoraist.wallet_core.domain.enums.RolesEnum;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,6 +14,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,12 +36,15 @@ public class UserEntity {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
+    @Column(name = "type_user")
     private RolesEnum role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WalletEntity> wallets = new ArrayList<>();
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
 }
