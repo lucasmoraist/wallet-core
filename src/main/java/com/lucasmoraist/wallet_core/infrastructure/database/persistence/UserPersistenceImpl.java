@@ -10,6 +10,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Log4j2
 @Component
 @RequiredArgsConstructor
@@ -24,6 +26,20 @@ public class UserPersistenceImpl implements UserPersistence {
         UserEntity entity = UserMapper.toEntity(user);
         UserEntity userSaved = this.userRepository.save(entity);
         return UserMapper.toDomain(userSaved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User findById(UUID userId) {
+        return UserMapper.toDomain(findEntityById(userId));
+    }
+
+    private UserEntity findEntityById(UUID userId) {
+        return this.userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", userId);
+                    return new RuntimeException("User not found");
+                });
     }
 
 }
