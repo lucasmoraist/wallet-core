@@ -43,6 +43,13 @@ public class WalletPersistenceImpl implements WalletPersistence {
         return WalletMapper.toDomain(walletSaved);
     }
 
+    @Override
+    public Wallet updateAmount(UUID walletId, BigDecimal amount) {
+        WalletEntity walletEntity = findEntityById(walletId);
+        walletEntity.setBalance(walletEntity.getBalance().add(amount));
+        return WalletMapper.toDomain(walletEntity);
+    }
+
     private WalletEntity findEntityById(UUID walletId) {
         return this.walletRepository.findById(walletId)
                 .orElseThrow(() -> {
