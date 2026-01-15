@@ -8,5 +8,8 @@ import java.util.UUID;
 public interface TransactionalDocumentationRoutes {
 
     ResponseEntity<Void> depositAmount(UUID walletId, BigDecimal amount);
+    ResponseEntity<Void> withdrawAmount(UUID walletId, BigDecimal amount);
+    ResponseEntity<Void> debitAmount(UUID walletId, BigDecimal amount);
+    ResponseEntity<Void> creditAmount(UUID walletId, BigDecimal amount, Integer installments);
 
 }
