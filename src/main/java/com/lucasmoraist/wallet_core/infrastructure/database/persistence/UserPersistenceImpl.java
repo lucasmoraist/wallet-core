@@ -22,8 +22,8 @@ public class UserPersistenceImpl implements UserPersistence {
     public User save(User user) {
         log.debug("Saving user: {}", user);
         UserEntity entity = UserMapper.toEntity(user);
-        this.userRepository.save(entity);
-        return UserMapper.toDomain(entity);
+        UserEntity userSaved = this.userRepository.save(entity);
+        return UserMapper.toDomain(userSaved);
     }
 
 }
