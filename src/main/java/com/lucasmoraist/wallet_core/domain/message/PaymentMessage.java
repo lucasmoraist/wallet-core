@@ -4,10 +4,9 @@ import com.lucasmoraist.wallet_core.domain.enums.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public record PaymentMessage(
-        UUID transferId,
+        String transferId,
         Payer payer,
         Payee payee,
         BigDecimal amount,
