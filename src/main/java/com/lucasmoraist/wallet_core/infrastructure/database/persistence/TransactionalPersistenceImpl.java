@@ -33,6 +33,7 @@ public class TransactionalPersistenceImpl implements TransactionalPersistence {
                 .type(paymentType)
                 .build();
         WalletTransactionEntity transactionSaved = this.walletTransactionalRepository.save(transactionEntity);
+        log.debug("Transaction saved: {}", transactionSaved);
         return WalletTransactionMapper.toDomain(transactionSaved);
     }
 

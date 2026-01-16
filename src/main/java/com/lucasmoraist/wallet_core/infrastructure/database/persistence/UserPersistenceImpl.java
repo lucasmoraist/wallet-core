@@ -22,16 +22,19 @@ public class UserPersistenceImpl implements UserPersistence {
     @Override
     @Transactional
     public User save(User user) {
-        log.debug("Saving user: {}", user);
         UserEntity entity = UserMapper.toEntity(user);
         UserEntity userSaved = this.userRepository.save(entity);
+        log.debug("User saved with id: {}", userSaved);
         return UserMapper.toDomain(userSaved);
     }
 
     @Override
     @Transactional(readOnly = true)
     public User findById(UUID userId) {
-        return UserMapper.toDomain(findEntityById(userId));
+        log.debug("Finding user by id: {}", userId);
+        User user = UserMapper.toDomain(findEntityById(userId));
+        log.debug("User found: {}", user);
+        return user;
     }
 
     private UserEntity findEntityById(UUID userId) {

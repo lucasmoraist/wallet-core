@@ -6,9 +6,13 @@ import com.lucasmoraist.wallet_core.application.usecases.user.GetUserByIdCase;
 import com.lucasmoraist.wallet_core.domain.enums.PaymentStatus;
 import com.lucasmoraist.wallet_core.domain.message.PaymentMessage;
 import com.lucasmoraist.wallet_core.domain.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 
 public class OrchestrationTransfer {
+
+    private static final Logger log = LoggerFactory.getLogger(OrchestrationTransfer.class);
 
     private final GetUserByIdCase getUserByIdCase;
     private final DepositAmountCase depositAmountCase;
@@ -27,16 +31,21 @@ public class OrchestrationTransfer {
 
     public void execute(Message<PaymentMessage> message) {
         PaymentMessage payment = message.getPayload();
+        log.info("Received payment message: {}", payment);
 
         try {
             User payer = getUserByIdCase.execute(payment.payer().payerId());
+            log.debug("Payer retrieved: {}", payer);
             User payee = getUserByIdCase.execute(payment.payee().payeeId());
+            log.debug("Payee retrieved: {}", payee);
 
-            this.depositAmountCase.execute(payee.wallets().getFirst().id(), payment.amount());
             this.withdrawAmountCase.execute(payer.wallets().getFirst().id(), payment.amount());
+            this.depositAmountCase.execute(payee.wallets().getFirst().id(), payment.amount());
 
+            log.info("Payment processed successfully: {}", payment);
             this.processMessages.execute(payment, PaymentStatus.COMPLETED);
         } catch (Exception ex) {
+            log.warn("Failed to process payment: {}", payment, ex);
             this.processMessages.execute(payment, PaymentStatus.FAILED);
         }
     }

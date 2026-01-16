@@ -27,22 +27,30 @@ public class MessageGatewayImpl implements MessageGateway {
 
     @Override
     public void sendToTransferManager(PaymentMessage message) {
+        log.debug("Sending message to Transfer Manager: {}", message);
+
         String transferStatus = getRoutingKey(message.status());
+        log.debug("Determined routing key for transfer: {}", transferStatus);
 
         walletProducer.sendMessage(withPayload(message)
                 .setHeader(TRANSFER_ROUTING_KEY, transferStatus)
                 .setHeader(TRACE_ID_HEADER, message.payflow().traceId())
                 .build(), TO_TRANSFER_MANAGER);
+        log.info("Message sent to Transfer Manager: {}", message);
     }
 
     @Override
     public void sendToNotificationSvc(PaymentMessage message) {
+        log.debug("Sending message to Notification Service: {}", message);
+
         String transferStatus = getRoutingKey(message.status());
+        log.debug("Determined routing key for notification: {}", transferStatus);
 
         walletProducer.sendMessage(withPayload(message)
                 .setHeader(NOTIFICATION_ROUTING_KEY, transferStatus)
                 .setHeader(TRACE_ID_HEADER, message.payflow().traceId())
                 .build(), TO_NOTIFICATION_SVC);
+        log.info("Message sent to Notification Service: {}", message);
     }
 
     private String getRoutingKey(PaymentStatus status) {
