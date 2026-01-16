@@ -27,7 +27,10 @@ public class WalletPersistenceImpl implements WalletPersistence {
 
     @Override
     public Wallet findById(UUID walletId) {
-        return WalletMapper.toDomain(findEntityById(walletId));
+        log.debug("Finding wallet by id: {}", walletId);
+        Wallet wallet = WalletMapper.toDomain(findEntityById(walletId));
+        log.debug("Wallet found: {}", wallet);
+        return wallet;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class WalletPersistenceImpl implements WalletPersistence {
                 .transactions(new ArrayList<>())
                 .build();
         WalletEntity walletSaved = this.walletRepository.save(walletEntity);
+        log.debug("Wallet created for user {}: {}", user.id(), walletSaved);
         return WalletMapper.toDomain(walletSaved);
     }
 
@@ -50,9 +54,21 @@ public class WalletPersistenceImpl implements WalletPersistence {
         WalletEntity walletEntity = findEntityById(walletId);
 
         switch (paymentType) {
-            case DEPOSIT -> walletEntity.setBalance(walletEntity.getBalance().add(amount));
-            case WITHDRAWAL, DEBIT, CREDIT -> walletEntity.setBalance(walletEntity.getBalance().subtract(amount));
-            default -> throw new IllegalArgumentException("Unsupported payment type: " + paymentType);
+            case DEPOSIT -> {
+                log.debug("Processing DEPOSIT of {} to wallet {}", amount, walletId);
+                walletEntity.setBalance(walletEntity.getBalance().add(amount));
+                log.debug("New balance after DEPOSIT: {}", walletEntity.getBalance());
+            }
+            case WITHDRAWAL, DEBIT, CREDIT -> {
+                log.debug("Processing {} of {} from wallet {}", paymentType, amount, walletId);
+                this.validateSufficientFunds(walletEntity, amount);
+                walletEntity.setBalance(walletEntity.getBalance().subtract(amount));
+                log.debug("New balance after {}: {}", paymentType, walletEntity.getBalance());
+            }
+            default -> {
+                log.error("Unsupported payment type: {}", paymentType);
+                throw new IllegalArgumentException("Unsupported payment type: " + paymentType);
+            }
         }
 
         return WalletMapper.toDomain(walletEntity);
@@ -64,6 +80,14 @@ public class WalletPersistenceImpl implements WalletPersistence {
                     log.error("Wallet not found: {}", walletId);
                     return new RuntimeException("Wallet not found");
                 });
+    }
+
+    private void validateSufficientFunds(WalletEntity entity, BigDecimal amount) {
+        if (entity.getBalance().compareTo(amount) < 0) {
+            log.error("Insufficient funds: current balance {}, attempted amount {}",
+                    entity.getBalance(), amount);
+            throw new IllegalArgumentException("Insufficient funds");
+        }
     }
 
 }
