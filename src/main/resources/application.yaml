@@ -10,12 +10,12 @@ spring:
       bindings:
         fromProcessTransfer-in-0:
           destination: payflow-exchange
-          group: wallet.processing
+          group: ${spring.application.name}
           content-type: application/json
           consumer:
             concurrency: 5
             max-attempts: 3
-            back-off-initial-interval: 1000
+            back-off-initial-interval: 300
             back-off-multiplier: 2.0
         toProcessTransfer-out-0:
           destination: payflow-exchange
