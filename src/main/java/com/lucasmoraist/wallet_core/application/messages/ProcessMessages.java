@@ -12,8 +12,8 @@ public class ProcessMessages {
         this.messageGateway = messageGateway;
     }
 
-    public void execute(PaymentMessage message, PaymentStatus status) {
-        PaymentMessage paymentMessage = new PaymentMessage(message, status);
+    public void execute(PaymentMessage message, PaymentStatus status, String statusReason) {
+        PaymentMessage paymentMessage = new PaymentMessage(message, status, statusReason);
         this.messageGateway.sendToTransferManager(paymentMessage);
         this.messageGateway.sendToNotificationSvc(paymentMessage);
     }

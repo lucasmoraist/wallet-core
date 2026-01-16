@@ -11,18 +11,22 @@ public record PaymentMessage(
         Payee payee,
         BigDecimal amount,
         PaymentStatus status,
+        String statusReason,
         LocalDateTime createdAt,
         Payflow payflow
 ) {
-    public PaymentMessage(PaymentMessage message, PaymentStatus status) {
+
+    public PaymentMessage(PaymentMessage message, PaymentStatus status, String statusReason) {
         this(
                 message.transferId(),
                 message.payer(),
                 message.payee(),
                 message.amount(),
                 status,
+                statusReason,
                 message.createdAt(),
                 message.payflow()
         );
     }
+
 }

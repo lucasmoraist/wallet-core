@@ -4,6 +4,7 @@ import com.lucasmoraist.wallet_core.application.usecases.transactions.DepositAmo
 import com.lucasmoraist.wallet_core.application.usecases.transactions.WithdrawAmountCase;
 import com.lucasmoraist.wallet_core.application.usecases.user.GetUserByIdCase;
 import com.lucasmoraist.wallet_core.domain.enums.PaymentStatus;
+import com.lucasmoraist.wallet_core.domain.exception.InsufficientFundsException;
 import com.lucasmoraist.wallet_core.domain.message.PaymentMessage;
 import com.lucasmoraist.wallet_core.domain.model.User;
 import org.slf4j.Logger;
@@ -43,10 +44,13 @@ public class OrchestrationTransfer {
             this.depositAmountCase.execute(payee.wallets().getFirst().id(), payment.amount());
 
             log.info("Payment processed successfully: {}", payment);
-            this.processMessages.execute(payment, PaymentStatus.COMPLETED);
+            this.processMessages.execute(payment, PaymentStatus.COMPLETED, payment.statusReason());
+        } catch (InsufficientFundsException ex) {
+            log.warn("Insufficient funds for payment: {}", payment, ex);
+            this.processMessages.execute(payment, PaymentStatus.FAILED, "Payment failed due to insufficient funds.");
         } catch (Exception ex) {
             log.warn("Failed to process payment: {}", payment, ex);
-            this.processMessages.execute(payment, PaymentStatus.FAILED);
+            this.processMessages.execute(payment, PaymentStatus.FAILED, "Payment failed due to an internal error.");
         }
     }
 

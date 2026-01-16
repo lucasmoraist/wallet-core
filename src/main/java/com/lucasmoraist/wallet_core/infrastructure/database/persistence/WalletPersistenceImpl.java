@@ -2,6 +2,7 @@ package com.lucasmoraist.wallet_core.infrastructure.database.persistence;
 
 import com.lucasmoraist.wallet_core.application.gateway.WalletPersistence;
 import com.lucasmoraist.wallet_core.domain.enums.PaymentType;
+import com.lucasmoraist.wallet_core.domain.exception.InsufficientFundsException;
 import com.lucasmoraist.wallet_core.domain.model.User;
 import com.lucasmoraist.wallet_core.domain.model.Wallet;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.UserEntity;
@@ -86,7 +87,7 @@ public class WalletPersistenceImpl implements WalletPersistence {
         if (entity.getBalance().compareTo(amount) < 0) {
             log.error("Insufficient funds: current balance {}, attempted amount {}",
                     entity.getBalance(), amount);
-            throw new IllegalArgumentException("Insufficient funds");
+            throw new InsufficientFundsException("Insufficient funds");
         }
     }
 
