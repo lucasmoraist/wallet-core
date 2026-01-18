@@ -2,6 +2,7 @@ package com.lucasmoraist.wallet_core.infrastructure.mapper;
 
 import com.lucasmoraist.wallet_core.domain.model.User;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.UserEntity;
+import com.lucasmoraist.wallet_core.infrastructure.database.entity.WalletEntity;
 
 public final class UserMapper {
 
@@ -16,30 +17,36 @@ public final class UserMapper {
                 entity.getEmail(),
                 entity.getPassword(),
                 entity.getRole(),
-                entity.getWallets() != null ? entity.getWallets()
-                        .stream()
-                        .map(WalletMapper::toDomain)
-                        .toList() : null,
+                entity.getWallet() != null
+                        ? WalletMapper.toDomain(entity.getWallet())
+                        : null,
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );
     }
 
     public static UserEntity toEntity(User user) {
-        return new UserEntity(
-                user.id() != null ? user.id() : null,
+        WalletEntity walletEntity = user.wallet() != null
+                ? WalletMapper.toEntity(user.wallet())
+                : null;
+
+        UserEntity userEntity = new UserEntity(
+                user.id(),
                 user.fullName(),
                 user.cpfCnpj(),
                 user.email(),
                 user.password(),
                 user.role(),
-                user.wallets() != null ? user.wallets()
-                        .stream()
-                        .map(WalletMapper::toEntity)
-                        .toList() : null,
-                user.createdAt() != null ? user.createdAt() : null,
-                user.updatedAt() != null ? user.updatedAt() : null
+                walletEntity,
+                user.createdAt(),
+                user.updatedAt()
         );
+
+        if (walletEntity != null) {
+            walletEntity.setUser(userEntity);
+        }
+
+        return userEntity;
     }
 
 }

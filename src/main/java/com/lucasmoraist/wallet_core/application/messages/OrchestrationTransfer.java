@@ -40,8 +40,8 @@ public class OrchestrationTransfer {
             User payee = getUserByIdCase.execute(payment.payee().payeeId());
             log.debug("Payee retrieved: {}", payee);
 
-            this.withdrawAmountCase.execute(payer.wallets().getFirst().id(), payment.amount());
-            this.depositAmountCase.execute(payee.wallets().getFirst().id(), payment.amount());
+            this.withdrawAmountCase.execute(payer.wallet().id(), payment.amount());
+            this.depositAmountCase.execute(payee.wallet().id(), payment.amount());
 
             log.info("Payment processed successfully: {}", payment);
             this.processMessages.execute(payment, PaymentStatus.COMPLETED, payment.statusReason());
