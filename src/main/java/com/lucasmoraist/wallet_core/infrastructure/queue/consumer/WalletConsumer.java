@@ -1,6 +1,6 @@
 package com.lucasmoraist.wallet_core.infrastructure.queue.consumer;
 
-import com.lucasmoraist.wallet_core.application.messages.OrchestrationTransfer;
+import com.lucasmoraist.wallet_core.application.usecases.messages.OrchestrationTransfer;
 import com.lucasmoraist.wallet_core.domain.message.PaymentMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

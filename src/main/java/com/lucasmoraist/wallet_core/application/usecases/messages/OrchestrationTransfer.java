@@ -1,4 +1,4 @@
-package com.lucasmoraist.wallet_core.application.messages;
+package com.lucasmoraist.wallet_core.application.usecases.messages;
 
 import com.lucasmoraist.wallet_core.application.usecases.transactions.DepositAmountCase;
 import com.lucasmoraist.wallet_core.application.usecases.transactions.WithdrawAmountCase;

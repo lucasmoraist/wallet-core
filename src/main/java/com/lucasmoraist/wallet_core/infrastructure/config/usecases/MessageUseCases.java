@@ -1,8 +1,8 @@
 package com.lucasmoraist.wallet_core.infrastructure.config.usecases;
 
 import com.lucasmoraist.wallet_core.application.gateway.MessageGateway;
-import com.lucasmoraist.wallet_core.application.messages.OrchestrationTransfer;
-import com.lucasmoraist.wallet_core.application.messages.ProcessMessages;
+import com.lucasmoraist.wallet_core.application.usecases.messages.OrchestrationTransfer;
+import com.lucasmoraist.wallet_core.application.usecases.messages.ProcessMessages;
 import com.lucasmoraist.wallet_core.application.usecases.transactions.DepositAmountCase;
 import com.lucasmoraist.wallet_core.application.usecases.transactions.WithdrawAmountCase;
 import com.lucasmoraist.wallet_core.application.usecases.user.GetUserByIdCase;
