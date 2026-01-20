@@ -5,6 +5,7 @@ import com.lucasmoraist.wallet_core.domain.model.User;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.UserEntity;
 import com.lucasmoraist.wallet_core.infrastructure.database.repository.UserRepository;
 import com.lucasmoraist.wallet_core.infrastructure.mapper.UserMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class UserPersistenceImpl implements UserPersistence {
     @Transactional
     public User save(User user) {
         UserEntity entity = UserMapper.toEntity(user);
-        UserEntity userSaved = this.userRepository.save(entity);
+        UserEntity userSaved = this.userRepository.saveAndFlush(entity);
         log.debug("User saved with id: {}", userSaved);
         return UserMapper.toDomain(userSaved);
     }
@@ -41,7 +42,7 @@ public class UserPersistenceImpl implements UserPersistence {
         return this.userRepository.findById(userId)
                 .orElseThrow(() -> {
                     log.error("User not found with id: {}", userId);
-                    return new RuntimeException("User not found");
+                    return new EntityNotFoundException("User not found");
                 });
     }
 
