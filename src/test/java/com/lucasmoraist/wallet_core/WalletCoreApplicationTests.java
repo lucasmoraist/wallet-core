@@ -10,7 +10,7 @@ class WalletCoreApplicationTests {
 
 	@Test
 	void contextLoads() {
-        WalletCoreApplication.main(new String[0]);
+        WalletCoreApplication.main(new String[] {"--spring.profiles.active=test"});
 	}
 
 }
