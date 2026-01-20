@@ -10,6 +10,7 @@ import com.lucasmoraist.wallet_core.infrastructure.database.entity.WalletEntity;
 import com.lucasmoraist.wallet_core.infrastructure.database.repository.WalletRepository;
 import com.lucasmoraist.wallet_core.infrastructure.mapper.UserMapper;
 import com.lucasmoraist.wallet_core.infrastructure.mapper.WalletMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ public class WalletPersistenceImpl implements WalletPersistence {
     private final WalletRepository walletRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Wallet findById(UUID walletId) {
         log.debug("Finding wallet by id: {}", walletId);
         Wallet wallet = WalletMapper.toDomain(findEntityById(walletId));
@@ -66,10 +68,6 @@ public class WalletPersistenceImpl implements WalletPersistence {
                 walletEntity.setBalance(walletEntity.getBalance().subtract(amount));
                 log.debug("New balance after {}: {}", paymentType, walletEntity.getBalance());
             }
-            default -> {
-                log.error("Unsupported payment type: {}", paymentType);
-                throw new IllegalArgumentException("Unsupported payment type: " + paymentType);
-            }
         }
 
         return WalletMapper.toDomain(walletEntity);
@@ -79,7 +77,7 @@ public class WalletPersistenceImpl implements WalletPersistence {
         return this.walletRepository.findById(walletId)
                 .orElseThrow(() -> {
                     log.error("Wallet not found: {}", walletId);
-                    return new RuntimeException("Wallet not found");
+                    return new EntityNotFoundException("Wallet not found");
                 });
     }
 
