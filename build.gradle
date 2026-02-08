@@ -29,20 +29,41 @@ ext {
 }
 
 dependencies {
+    // Spring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-flyway'
 	implementation 'org.springframework.boot:spring-boot-h2console'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+	// DB
 	implementation 'org.flywaydb:flyway-database-postgresql'
-	implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// Messaging
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
+
+	// Cache
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// Security
+	implementation 'com.auth0:java-jwt:4.5.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Logging
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-flyway-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
