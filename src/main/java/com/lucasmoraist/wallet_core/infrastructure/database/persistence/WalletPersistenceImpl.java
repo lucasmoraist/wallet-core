@@ -13,6 +13,7 @@ import com.lucasmoraist.wallet_core.infrastructure.mapper.WalletMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +54,7 @@ public class WalletPersistenceImpl implements WalletPersistence {
 
     @Override
     @Transactional
+    @CacheEvict(value = "wallets", key = "#walletId")
     public Wallet updateAmount(UUID walletId, BigDecimal amount, PaymentType paymentType) {
         WalletEntity walletEntity = findEntityById(walletId);
 
