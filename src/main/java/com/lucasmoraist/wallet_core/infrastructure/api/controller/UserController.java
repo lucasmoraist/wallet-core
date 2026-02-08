@@ -28,7 +28,7 @@ public class UserController implements UserDocumentationRoutes {
     private final GetUserByIdCase getUserByIdCase;
 
     @Override
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Void> createUser(@RequestBody @Valid CreateUserRequest request) {
         User user = this.createUserCase.execute(
                 request.name(),
