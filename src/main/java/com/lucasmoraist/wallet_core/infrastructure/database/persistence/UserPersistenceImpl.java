@@ -38,6 +38,16 @@ public class UserPersistenceImpl implements UserPersistence {
         return user;
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email)
+                .map(UserMapper::toDomain)
+                .orElseThrow(() -> {
+                    log.error("User not found with email: {}", email);
+                    return new EntityNotFoundException("User not found");
+                });
+    }
+
     private UserEntity findEntityById(UUID userId) {
         return this.userRepository.findById(userId)
                 .orElseThrow(() -> {

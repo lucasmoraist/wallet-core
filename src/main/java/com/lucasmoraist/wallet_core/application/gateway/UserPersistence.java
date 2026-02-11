@@ -8,5 +8,6 @@ public interface UserPersistence {
 
     User save(User user);
     User findById(UUID userId);
+    User findByEmail(String email);
 
 }
