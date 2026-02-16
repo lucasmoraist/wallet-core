@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -47,7 +48,9 @@ public class UserController implements UserDocumentationRoutes {
         UserResponseById response = new UserResponseById(
                 user.id(),
                 user.fullName(),
-                user.email()
+                user.email(),
+                user.cpfCnpj(),
+                Map.of("balance", user.wallet().balance())
         );
         return ResponseEntity.ok().body(response);
     }
