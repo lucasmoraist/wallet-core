@@ -39,6 +39,7 @@ public class UserPersistenceImpl implements UserPersistence {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return this.userRepository.findByEmail(email)
                 .map(UserMapper::toDomain)
