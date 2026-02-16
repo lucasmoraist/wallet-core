@@ -41,7 +41,7 @@ O **Wallet Core** atua como a autoridade de saldo do sistema. Ele gerencia o cic
 
 ## 🔮 Melhorias Futuras
 
-- [ ] Implementar **Spring Security + JWT** para proteger os endpoints de saldo.
-- [ ] Adicionar **Redis** para cache de consulta de saldo (Strategy Pattern para invalidar cache na transação).
-- [ ] Implementar **Optimistic Locking** (`@Version`) na entidade Wallet para alta concorrência.
-- [ ] Aumentar a cobertura de **Testes de Integração** (TestContainers).
+- [x] Implementar **Spring Security + JWT** para proteger os endpoints de saldo.
+- [x] Adicionar **Redis** para cache de consulta de saldo (Strategy Pattern para invalidar cache na transação).
+- [x] Implementar **Optimistic Locking** (`@Version`) na entidade Wallet para alta concorrência.
+- [x] Aumentar a cobertura de **Testes de Integração** (TestContainers).
