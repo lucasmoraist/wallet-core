@@ -1,5 +1,6 @@
 package com.lucasmoraist.wallet_core.infrastructure.security.config;
 
+import com.lucasmoraist.wallet_core.domain.enums.RolesEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,10 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String ROLE_ADMIN = RolesEnum.ADMIN.name();
+    private static final String ROLE_MERCHANT = RolesEnum.MERCHANT.name();
+    private static final String ROLE_COMMON = RolesEnum.COMMON.name();
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         return http
@@ -31,7 +36,11 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health", "/actuator/health/liveness", "/actuator/health/readiness").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/transactions/debit/**").hasAnyRole("ADMIN", "MERCHANT")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/transactions/deposit/**").hasAnyRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/api/v1/transactions/withdraw/**").hasAnyRole(ROLE_MERCHANT,
+                                ROLE_COMMON, ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/api/v1/transactions/debit/**").hasAnyRole(ROLE_MERCHANT, ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/api/v1/transactions/credit/**").hasAnyRole(ROLE_MERCHANT, ROLE_ADMIN)
                         .anyRequest().authenticated()
                 )
                 .build();
