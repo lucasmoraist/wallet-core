@@ -6,6 +6,7 @@ import com.lucasmoraist.wallet_core.infrastructure.database.entity.UserEntity;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.WalletEntity;
 
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 public final class UserMapper {
 
@@ -53,12 +54,16 @@ public final class UserMapper {
     }
 
     public static UserResponseById toResponseById(User user) {
+        Map<String, Object> walletMap = new LinkedHashMap<>();
+        walletMap.put("wallet_id", user.wallet().id());
+        walletMap.put("balance", user.wallet().balance());
+
         return new UserResponseById(
                 user.id(),
                 user.fullName(),
                 user.email(),
                 user.cpfCnpj(),
-                Map.of("balance", user.wallet().balance())
+                walletMap
         );
     }
 
