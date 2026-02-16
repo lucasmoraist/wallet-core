@@ -4,6 +4,7 @@ import com.lucasmoraist.wallet_core.application.gateway.SecurityGateway;
 import com.lucasmoraist.wallet_core.application.gateway.UserPersistence;
 import com.lucasmoraist.wallet_core.application.usecases.user.CreateUserCase;
 import com.lucasmoraist.wallet_core.application.usecases.user.GetUserByIdCase;
+import com.lucasmoraist.wallet_core.application.usecases.wallet.AddWalletCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 public class UserUseCase {
 
     @Bean
-    public CreateUserCase createUserCase(UserPersistence userPersistence, SecurityGateway securityGateway) {
-        return new CreateUserCase(userPersistence, securityGateway);
+    public CreateUserCase createUserCase(UserPersistence userPersistence, SecurityGateway securityGateway, AddWalletCase addWalletCase) {
+        return new CreateUserCase(userPersistence, addWalletCase, securityGateway);
     }
 
     @Bean
