@@ -1,8 +1,11 @@
 package com.lucasmoraist.wallet_core.infrastructure.mapper;
 
 import com.lucasmoraist.wallet_core.domain.model.User;
+import com.lucasmoraist.wallet_core.infrastructure.api.dto.user.UserResponseById;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.UserEntity;
 import com.lucasmoraist.wallet_core.infrastructure.database.entity.WalletEntity;
+
+import java.util.Map;
 
 public final class UserMapper {
 
@@ -47,6 +50,16 @@ public final class UserMapper {
         }
 
         return userEntity;
+    }
+
+    public static UserResponseById toResponseById(User user) {
+        return new UserResponseById(
+                user.id(),
+                user.fullName(),
+                user.email(),
+                user.cpfCnpj(),
+                Map.of("balance", user.wallet().balance())
+        );
     }
 
 }
