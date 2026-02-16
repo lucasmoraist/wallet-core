@@ -45,3 +45,17 @@ O **Wallet Core** atua como a autoridade de saldo do sistema. Ele gerencia o cic
 - [x] Adicionar **Redis** para cache de consulta de saldo (Strategy Pattern para invalidar cache na transação).
 - [x] Implementar **Optimistic Locking** (`@Version`) na entidade Wallet para alta concorrência.
 - [x] Aumentar a cobertura de **Testes de Integração** (TestContainers).
+
+### Resiliência e Tolerância a Falhas
+- [ ] Adicionar **Circuit Breaker** (Resilience4j) para lidar com falhas nos Use Cases que interagem com db e mensageria.
+
+### Consistência de Dados e Transações
+- [ ] Implementar uma verificação de **idempotência** no `OrchestrationTransfer`. Usando o `transferId` da mensagem como chave 
+      no Redis para garantir que a mesma transferência não seja processada duas vezes caso a mensagem seja duplicada na fila.
+
+### Observabilidade
+- [ ] Observabilidade e monitoramento: Integrar com **Prometheus & Grafana** para métricas de performance e saúde do serviço.
+
+### Refinamento de Domínio e Código
+- [ ] **Value Objects:** Em vez de usar `BigDecimal` solto para saldo e valor, crie um Value Object `Money` que encapsula regras de arredondamento e validações (como não permitir valores negativos), aumentando a expressividade do domínio.
+- [ ] **Contratos com Bean Validation:** Melhore as validações no `CreateUserRequest`. Adicione validações específicas de CPF/CNPJ (usando bibliotecas como o Hibernate Validator ou customizadas) para evitar que dados inválidos cheguem à camada de persistência.
